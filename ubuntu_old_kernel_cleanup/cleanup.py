@@ -22,9 +22,11 @@ def list_all_installed_kernel_packages():
             '--show',
             '--showformat=${binary:Package}\t${Version}\t${Status}\n',
             'linux-*').split('\n')
-    installed_packages = [line.split('\t')[0:2]
-            for line in dpkg_output
-            if line.endswith('ok installed')]
+    installed_packages = [
+        line.split('\t')[:2]
+        for line in dpkg_output
+        if line.endswith('ok installed')
+    ]
     return [(package, get_version(version))
             for (package, version) in installed_packages
             if KERNEL_PACKAGE_REGEX.match(package)]
